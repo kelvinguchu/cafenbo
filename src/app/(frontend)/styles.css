@@ -1,0 +1,154 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-heading: 'Montserrat', sans-serif;
+  --font-sans: 'Montserrat', sans-serif;
+
+  /* Brand colors */
+  --color-brand: #ff3131;
+  --color-brand-dark: #cc1a1a;
+  --color-brand-light: #ff5c5c;
+
+  /* Menu image animations */
+  --animate-menu-fade-in: menu-fade-in 0.7s ease-out both;
+  --animate-menu-zoom-in: menu-zoom-in 0.6s ease-out both;
+
+  @keyframes menu-fade-in {
+    from {
+      opacity: 0;
+      transform: scale(1.1);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+  }
+  @keyframes menu-zoom-in {
+    from {
+      opacity: 0;
+      transform: scale(1.08);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Light surfaces */
+  --color-surface-900: #0a0a0a;
+  --color-surface-800: #111111;
+  --color-surface-700: #1a1a1a;
+  --color-surface-600: #222222;
+  --color-surface-500: #f5f5f5;
+  --color-surface-400: #eeeeee;
+  --color-surface-300: #e5e5e5;
+  --color-surface-200: #d4d4d4;
+  --color-surface-100: #a3a3a3;
+  --color-surface-50: #737373;
+
+  /* Shadcn compat */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+  --card: #ffffff;
+  --card-foreground: #0a0a0a;
+  --popover: #ffffff;
+  --popover-foreground: #0a0a0a;
+  --primary: #ff3131;
+  --primary-foreground: #ffffff;
+  --secondary: #f5f5f5;
+  --secondary-foreground: #0a0a0a;
+  --muted: #f5f5f5;
+  --muted-foreground: #737373;
+  --accent: #f5f5f5;
+  --accent-foreground: #0a0a0a;
+  --destructive: #ff3131;
+  --border: rgba(0, 0, 0, 0.08);
+  --input: rgba(0, 0, 0, 0.08);
+  --ring: #ff3131;
+  --radius: 0.5rem;
+  --chart-1: #ff3131;
+  --chart-2: #ff5c5c;
+  --chart-3: #cc1a1a;
+  --chart-4: #e5e5e5;
+  --chart-5: #d4d4d4;
+  --sidebar: #f9f9f9;
+  --sidebar-foreground: #0a0a0a;
+  --sidebar-primary: #ff3131;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f5f5f5;
+  --sidebar-accent-foreground: #0a0a0a;
+  --sidebar-border: rgba(0, 0, 0, 0.08);
+  --sidebar-ring: #ff3131;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Montserrat', sans-serif;
+  }
+  ::selection {
+    background: rgba(255, 49, 49, 0.2);
+    color: #0a0a0a;
+  }
+}
+
+@layer utilities {
+  .section-padding {
+    @apply py-6 md:py-8;
+  }
+  .container-site {
+    @apply mx-auto w-full max-w-7xl px-5 md:px-8;
+  }
+}
