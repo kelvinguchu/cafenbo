@@ -9,6 +9,7 @@ import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { MenuCategories } from './collections/MenuCategories'
 import { MenuItems } from './collections/MenuItems'
+import { Reservations } from './collections/Reservations'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -33,7 +34,7 @@ export default buildConfig({
       ],
     },
   },
-  collections: [Users, Media, MenuCategories, MenuItems],
+  collections: [Users, Media, MenuCategories, MenuItems, Reservations],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

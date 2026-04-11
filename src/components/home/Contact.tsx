@@ -37,7 +37,7 @@ export function Contact() {
               <span className="block text-xs font-medium text-brand uppercase tracking-[0.2em] mb-2">
                 {item.label}
               </span>
-              <span className="block text-sm text-black/50 group-hover:text-black transition-colors duration-300">
+              <span className="block text-sm text-black/50 group-hover:text-black transition-colors duration-300 cursor-pointer">
                 {item.value}
               </span>
             </a>

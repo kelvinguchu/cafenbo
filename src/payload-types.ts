@@ -71,6 +71,7 @@ export interface Config {
     media: Media;
     'menu-categories': MenuCategory;
     'menu-items': MenuItem;
+    reservations: Reservation;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -82,6 +83,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     'menu-categories': MenuCategoriesSelect<false> | MenuCategoriesSelect<true>;
     'menu-items': MenuItemsSelect<false> | MenuItemsSelect<true>;
+    reservations: ReservationsSelect<false> | ReservationsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -213,6 +215,32 @@ export interface MenuItem {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reservations".
+ */
+export interface Reservation {
+  id: string;
+  fullName: string;
+  phone: string;
+  email: string;
+  guestCount: number;
+  tableCount: number;
+  seatingPreference: 'indoors' | 'outdoors';
+  /**
+   * Use YYYY-MM-DD.
+   */
+  reservationDate: string;
+  /**
+   * Use 24-hour HH:MM format.
+   */
+  reservationTime: string;
+  notes?: string | null;
+  source: 'website';
+  status: 'pending' | 'confirmed' | 'completed' | 'cancelled';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -250,6 +278,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'menu-items';
         value: string | MenuItem;
+      } | null)
+    | ({
+        relationTo: 'reservations';
+        value: string | Reservation;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -359,6 +391,25 @@ export interface MenuItemsSelect<T extends boolean = true> {
   category?: T;
   available?: T;
   sortOrder?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reservations_select".
+ */
+export interface ReservationsSelect<T extends boolean = true> {
+  fullName?: T;
+  phone?: T;
+  email?: T;
+  guestCount?: T;
+  tableCount?: T;
+  seatingPreference?: T;
+  reservationDate?: T;
+  reservationTime?: T;
+  notes?: T;
+  source?: T;
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
 }

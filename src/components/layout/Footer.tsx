@@ -19,7 +19,7 @@ const SOCIALS = [
 
 export function Footer() {
   return (
-    <footer className="bg-black text-white">
+    <footer className="bg-stone-50 text-stone-800 border-t border-stone-200">
       <div className="container-site py-12 md:py-16">
         <div className="mb-12">
           <Image
@@ -27,11 +27,11 @@ export function Footer() {
             alt="Café NBO"
             width={160}
             height={56}
-            className="h-12 w-auto brightness-0 invert mb-4"
+            className="h-12 w-auto mb-4"
           />
-          <p className="text-white/40 max-w-md text-sm leading-relaxed">
-            Born from a dream to create a space that combines the vibrancy of
-            Nairobi with culinary artistry, Café NBO is more than a café.
+          <p className="text-stone-500 max-w-md text-sm leading-relaxed">
+            Born from a dream to create a space that combines the vibrancy of Nairobi with culinary
+            artistry, Café NBO is more than a café.
           </p>
         </div>
 
@@ -44,8 +44,8 @@ export function Footer() {
               {QUICK_LINKS.map((link) => (
                 <li key={link.label}>
                   <a
-                    href={link.href}
-                    className="text-sm text-white/50 hover:text-white transition-colors duration-300"
+                    href={link.href.startsWith('#') ? `/${link.href}` : link.href}
+                    className="text-sm text-stone-600 hover:text-brand transition-colors duration-300 cursor-pointer"
                   >
                     {link.label}
                   </a>
@@ -60,12 +60,12 @@ export function Footer() {
             </h4>
             <div className="space-y-4">
               <div>
-                <p className="text-sm font-medium text-white/80">Monday — Friday</p>
-                <p className="text-sm text-white/40">7:00 AM — 11:00 PM</p>
+                <p className="text-sm font-medium text-stone-800">Monday — Friday</p>
+                <p className="text-sm text-stone-500">7:00 AM — 11:00 PM</p>
               </div>
               <div>
-                <p className="text-sm font-medium text-white/80">Weekends &amp; Holidays</p>
-                <p className="text-sm text-white/40">8:00 AM — 10:00 PM</p>
+                <p className="text-sm font-medium text-stone-800">Weekends &amp; Holidays</p>
+                <p className="text-sm text-stone-500">8:00 AM — 10:00 PM</p>
               </div>
             </div>
           </div>
@@ -75,11 +75,17 @@ export function Footer() {
               Contact
             </h4>
             <div className="space-y-3 text-sm">
-              <p className="text-white/50">Chaka Place, Kilimani, Nairobi</p>
-              <a href="tel:0708337077" className="block text-white/50 hover:text-white transition-colors">
+              <p className="text-stone-500">Chaka Place, Kilimani, Nairobi</p>
+              <a
+                href="tel:0708337077"
+                className="block text-stone-600 hover:text-brand transition-colors cursor-pointer"
+              >
                 0708 337 077
               </a>
-              <a href="mailto:Info@cafenbo.co.ke" className="block text-white/50 hover:text-white transition-colors">
+              <a
+                href="mailto:Info@cafenbo.co.ke"
+                className="block text-stone-600 hover:text-brand transition-colors cursor-pointer"
+              >
                 Info@cafenbo.co.ke
               </a>
             </div>
@@ -97,7 +103,7 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.label}
-                  className="w-9 h-9 flex items-center justify-center rounded-full border border-white/15 text-white/50 hover:text-brand hover:border-brand/40 transition-all duration-300"
+                  className="w-9 h-9 flex items-center justify-center rounded-full border border-stone-200 bg-white text-stone-500 hover:text-brand hover:border-brand/40 shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
                 >
                   <social.icon size={16} />
                 </a>
@@ -106,11 +112,11 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-white/30">
+        <div className="mt-12 pt-6 border-t border-stone-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-stone-400">
             © {new Date().getFullYear()} Café NBO. All rights reserved.
           </p>
-          <p className="text-xs text-white/20">
+          <p className="text-xs text-stone-400">
             Prices inclusive of 16% VAT &amp; 2% Catering Levy
           </p>
         </div>

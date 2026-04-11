@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useCallback, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import {
   HiOutlineChevronLeft,
@@ -15,51 +15,31 @@ type Props = {
   menu: MenuCategory[]
 }
 
-/** Map category slugs to all available photos */
-const PHOTOS: Record<string, string[]> = {
-  breakfast: [
-    '/images-webp/breakfast.webp',
-    '/images-webp/breakfast4.webp',
-    '/images-webp/breakfast3.webp',
-  ],
-  starters: ['/images-webp/breakfast2.webp'],
-  sandwiches: ['/images-webp/breakfast3.webp'],
-  salads: ['/images-webp/pilau-closeup.webp'],
-  'charcoal-over-pizza': [
-    '/images-webp/pizza.webp',
-    '/images-webp/pizza-closeup.webp',
-    '/images-webp/pizza2.webp',
-  ],
-  'clay-oven': ['/images-webp/pilau-side.webp', '/images-webp/pilau2.webp'],
-  'main-dishes': [
-    '/images-webp/pilau.webp',
-    '/images-webp/pilau3.webp',
-    '/images-webp/pilau-closeup.webp',
-  ],
+const CATEGORY_IMAGES: Record<string, string> = {
+  coffee: '/images-webp/coffee.webp',
+  tea: '/images-webp/tea.webp',
+  pastries: '/images-webp/KVK03089.webp',
+  breakfast: '/images-webp/breakfast4.webp',
+  'sweet-treats': '/images-webp/KVK03118.webp',
+  starters: '/images-webp/KVK03133.webp',
+  sandwiches: '/images-webp/KVK03149.webp',
+  burgers: '/images-webp/KVK03319.webp',
+  salads: '/images-webp/KVK03107.webp',
+  pasta: '/images-webp/KVK03192.webp',
+  pizza: '/images-webp/pizza.webp',
+  'charcoal-over-pizza': '/images-webp/pizza.webp',
+  'clay-oven': '/images-webp/pilau-side.webp',
+  'main-dishes': '/images-webp/KVK03230.webp',
 }
 
-/** Fallback bg images for categories without their own photos */
-const FALLBACK_IMAGES = [
-  '/images-webp/breakfast.webp',
-  '/images-webp/pizza.webp',
-  '/images-webp/pilau.webp',
-]
-
-/** Collect every unique image path for preloading */
-const ALL_IMAGES = [...new Set([...Object.values(PHOTOS).flat(), ...FALLBACK_IMAGES])]
+const ALL_IMAGES = Array.from(new Set(Object.values(CATEGORY_IMAGES)))
 
 export function VisualMenu({ menu }: Readonly<Props>) {
   const [active, setActive] = useState(0)
   const [showAll, setShowAll] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
-  // Persist per-category image position
-  const [imageMap, setImageMap] = useState<Record<number, number>>({})
-  const imageIdx = imageMap[active] ?? 0
-  const setImageIdx = useCallback(
-    (idx: number) => setImageMap((m) => ({ ...m, [active]: idx })),
-    [active],
-  )
+  const validMenu = menu.filter((cat) => CATEGORY_IMAGES[cat.slug])
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -73,18 +53,16 @@ export function VisualMenu({ menu }: Readonly<Props>) {
     return () => document.removeEventListener('mousedown', handler)
   }, [showAll])
 
-  if (!menu.length) return null
+  if (!validMenu.length) return null
 
-  const cat = menu[active]
-  const images = PHOTOS[cat.slug] ?? []
-  const bgImage =
-    images[imageIdx % images.length] || FALLBACK_IMAGES[active % FALLBACK_IMAGES.length]
+  const cat = validMenu[active] || validMenu[0]
+  const bgImage = CATEGORY_IMAGES[cat.slug]
 
-  const prev = () => setActive((p) => (p === 0 ? menu.length - 1 : p - 1))
-  const next = () => setActive((p) => (p === menu.length - 1 ? 0 : p + 1))
+  const prev = () => setActive((p) => (p === 0 ? validMenu.length - 1 : p - 1))
+  const next = () => setActive((p) => (p === validMenu.length - 1 ? 0 : p + 1))
 
   return (
-    <section id="menu" className="relative overflow-hidden bg-neutral-950">
+    <section id="menu" className="relative overflow-hidden bg-slate-50">
       {/* Preload all images in a hidden div */}
       <div className="hidden" aria-hidden="true">
         {ALL_IMAGES.map((src) => (
@@ -92,128 +70,91 @@ export function VisualMenu({ menu }: Readonly<Props>) {
         ))}
       </div>
 
-      {/* Background image — fills the section */}
-      <div className="absolute inset-0">
-        <Image
-          key={`bg-${bgImage}`}
-          src={bgImage}
-          alt=""
-          fill
-          className="object-cover scale-105 blur-xs brightness-[0.25] animate-menu-fade-in"
-          sizes="100vw"
-          priority
-        />
-      </div>
-
-      <div className="relative z-10 py-8 md:py-10">
-        <div className="container-site">
+      <div className="relative z-10 py-8 md:py-12">
+        <div className="container-site max-w-7xl">
           {/* ── Header ── */}
-          <div className="text-center mb-14">
-            <div className="w-10 h-0.5 bg-brand mx-auto mb-6" />
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white">Our Menu</h2>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl lg:text-7xl font-serif text-slate-900 mb-6 tracking-tight">
+              A Taste of <span className="italic text-brand text-opacity-80">Elegance</span>
+            </h2>
+            <div className="w-16 h-1 bg-brand mx-auto opacity-80 cursor-pointer" />
           </div>
 
-          {/* ── Category Switcher ── */}
-          <div ref={dropdownRef} className="relative flex items-center justify-center gap-6 mb-12">
-            <button
-              onClick={prev}
-              aria-label="Previous category"
-              className="size-10 rounded-full border border-white/20 grid place-items-center text-white/50 hover:text-white hover:border-white/50 hover:bg-white/5 transition-all"
-            >
-              <HiOutlineChevronLeft className="size-5" />
-            </button>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-stretch transition-all duration-800 ease-in-out">
+            {/* ── Menu Categories & Items (Left Column) ── */}
+            <div className="lg:col-span-7 flex flex-col h-full z-10 transition-all duration-800 ease-in-out">
+              {/* Category Nav */}
+              <div
+                ref={dropdownRef}
+                className="relative flex items-center justify-between mb-10 overflow-visible"
+              >
+                <button
+                  onClick={prev}
+                  aria-label="Previous category"
+                  className="size-12 rounded-full border border-slate-200 grid place-items-center text-slate-400 hover:text-slate-800 hover:border-slate-300 hover:bg-white shadow-sm hover:shadow transition-all bg-white/50 cursor-pointer"
+                >
+                  <HiOutlineChevronLeft className="size-5" />
+                </button>
 
-            <button
-              onClick={() => setShowAll((s) => !s)}
-              className="text-center min-w-48 group cursor-pointer"
-            >
-              <h3 className="text-white text-xl md:text-2xl font-bold tracking-tight inline-flex items-center gap-2">
-                {cat.category}
-                <HiOutlineChevronDown
-                  className={`size-4 text-white/40 group-hover:text-white/70 transition-transform duration-200 ${
-                    showAll ? 'rotate-180' : ''
-                  }`}
-                />
-              </h3>
-              <p className="text-white/30 text-xs mt-1 tabular-nums">
-                {active + 1} / {menu.length}
-              </p>
-            </button>
-
-            <button
-              onClick={next}
-              aria-label="Next category"
-              className="size-10 rounded-full border border-white/20 grid place-items-center text-white/50 hover:text-white hover:border-white/50 hover:bg-white/5 transition-all"
-            >
-              <HiOutlineChevronRight className="size-5" />
-            </button>
-
-            {/* Category dropdown */}
-            {showAll && (
-              <div className="absolute top-full mt-3 z-20 w-72 rounded-xl border border-white/10 bg-neutral-900/95 backdrop-blur-xl shadow-2xl">
-                <ScrollArea className="h-80">
-                  <div className="p-2">
-                    {menu.map((c, i) => (
-                      <button
-                        key={c.slug}
-                        onClick={() => {
-                          setActive(i)
-                          setShowAll(false)
-                        }}
-                        className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${
-                          i === active
-                            ? 'bg-brand/15 text-brand font-semibold'
-                            : 'text-white/60 hover:text-white hover:bg-white/5'
-                        }`}
-                      >
-                        {c.category}
-                      </button>
-                    ))}
+                <button
+                  onClick={() => setShowAll((s) => !s)}
+                  className="flex flex-col items-center group cursor-pointer px-4 relative"
+                >
+                  <h3 className="text-slate-800 text-2xl md:text-3xl font-semibold tracking-tight flex items-center gap-2 mb-1">
+                    {cat.category}
+                    <HiOutlineChevronDown
+                      className={`size-5 text-slate-400 group-hover:text-brand transition-transform duration-300 ${
+                        showAll ? 'rotate-180 text-brand' : ''
+                      }`}
+                    />
+                  </h3>
+                  <div className="flex items-center gap-1.5 mt-1">
+                    <span className="h-px w-6 bg-slate-300" />
+                    <p className="text-slate-400 text-xs font-bold tracking-widest tabular-nums uppercase">
+                      {active + 1} / {validMenu.length}
+                    </p>
+                    <span className="h-px w-6 bg-slate-300" />
                   </div>
-                </ScrollArea>
-              </div>
-            )}
-          </div>
+                </button>
 
-          {/* ── Image Gallery + Menu Grid ── */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start">
-            {/* Image column — hidden on mobile, bg image covers instead */}
-            <div className="hidden lg:block">
-              <div className="relative lg:aspect-auto lg:h-full min-h-72 max-h-150 rounded-2xl overflow-hidden">
-                <Image
-                  key={`hero-${bgImage}`}
-                  src={bgImage}
-                  alt={cat.category}
-                  fill
-                  className="object-cover animate-menu-zoom-in"
-                  sizes="(min-width: 1024px) 40vw, 100vw"
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-black/20" />
+                <button
+                  onClick={next}
+                  aria-label="Next category"
+                  className="size-12 rounded-full border border-slate-200 grid place-items-center text-slate-400 hover:text-slate-800 hover:border-slate-300 hover:bg-white shadow-sm hover:shadow transition-all bg-white/50 cursor-pointer"
+                >
+                  <HiOutlineChevronRight className="size-5" />
+                </button>
 
-                {/* Image nav dots — only when multiple images */}
-                {images.length > 1 && (
-                  <div className="absolute bottom-4 inset-x-0 flex justify-center gap-2">
-                    {images.map((src) => (
-                      <button
-                        key={src}
-                        onClick={() => setImageIdx(images.indexOf(src))}
-                        aria-label={`View photo ${images.indexOf(src) + 1}`}
-                        className={`h-1.5 rounded-full transition-all duration-300 ${
-                          src === images[imageIdx % images.length]
-                            ? 'w-6 bg-white'
-                            : 'w-1.5 bg-white/40 hover:bg-white/60'
-                        }`}
-                      />
-                    ))}
+                {/* Dropdown */}
+                {showAll && (
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-4 z-50 w-72 rounded-2xl border border-slate-100 bg-white/95 backdrop-blur-xl shadow-2xl overflow-hidden ring-1 ring-black/5">
+                    <ScrollArea className="h-75">
+                      <div className="p-3">
+                        {validMenu.map((c, i) => (
+                          <button
+                            key={c.slug}
+                            onClick={() => {
+                              setActive(i)
+                              setShowAll(false)
+                            }}
+                            className={`w-full text-left px-5 py-3 rounded-xl text-sm transition-all duration-200 mb-1 ${
+                              i === active
+                                ? 'bg-brand/10 text-brand font-medium'
+                                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                            }`}
+                          >
+                            {c.category}
+                          </button>
+                        ))}
+                      </div>
+                    </ScrollArea>
                   </div>
                 )}
               </div>
-            </div>
 
-            {/* Menu items column */}
-            <div className="flex flex-col">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 content-start">
-                {cat.items.map((item) => {
+              {/* Items Grid */}
+              <div className="grid grid-cols-1 items-start gap-x-8 gap-y-4">
+                {cat.items.slice(0, 8).map((item) => {
                   const hasPromo = item.isPromo && item.promoPrice
                   const savedPct = hasPromo
                     ? Math.round(((item.price - item.promoPrice!) / item.price) * 100)
@@ -222,36 +163,36 @@ export function VisualMenu({ menu }: Readonly<Props>) {
                   return (
                     <div
                       key={item.name}
-                      className={`group relative rounded-xl px-5 py-4 backdrop-blur-md transition-all duration-200 ${
-                        hasPromo
-                          ? 'bg-brand/10 border border-brand/20'
-                          : 'bg-white/6 border border-white/8 hover:bg-white/10'
+                      className={`group relative flex items-baseline justify-between gap-4 py-3 border-b border-slate-200/60 last:border-0 transition-colors ${
+                        hasPromo ? 'bg-amber-50/50 rounded-lg px-3 -mx-3 border-none shadow-sm' : ''
                       }`}
                     >
-                      {/* Promo tag */}
-                      {hasPromo && (
-                        <span className="absolute -top-2 right-3 inline-flex items-center gap-1 rounded-full bg-brand px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white">
-                          <HiOutlineSparkles className="size-2.5" />
-                          {savedPct}% off
-                        </span>
-                      )}
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="text-base text-slate-800 font-medium group-hover:text-brand transition-colors cursor-pointer">
+                            {item.name}
+                          </span>
+                          {hasPromo && (
+                            <span className="inline-flex items-center gap-1 rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-700">
+                              <HiOutlineSparkles className="size-3" />
+                              {savedPct}%
+                            </span>
+                          )}
+                        </div>
+                      </div>
 
-                      <div className="flex items-start justify-between gap-3">
-                        <span className="text-sm font-medium text-white/80 leading-snug group-hover:text-white transition-colors">
-                          {item.name}
-                        </span>
-
+                      <div className="shrink-0 flex flex-col items-end pt-0.5">
                         {hasPromo ? (
-                          <div className="shrink-0 text-right">
-                            <span className="block text-[10px] text-white/25 line-through tabular-nums">
+                          <>
+                            <span className="text-xs text-slate-400 line-through tabular-nums -mb-1 block">
                               {item.price.toLocaleString()}
                             </span>
-                            <span className="block text-sm font-bold text-brand tabular-nums">
+                            <span className="text-base font-bold text-brand tabular-nums block">
                               {item.promoPrice!.toLocaleString()}
                             </span>
-                          </div>
+                          </>
                         ) : (
-                          <span className="shrink-0 text-sm font-bold text-brand tabular-nums">
+                          <span className="text-base font-bold text-slate-900 tabular-nums">
                             {item.price.toLocaleString()}
                           </span>
                         )}
@@ -261,9 +202,41 @@ export function VisualMenu({ menu }: Readonly<Props>) {
                 })}
               </div>
 
-              <p className="text-[11px] text-white/15 mt-auto pt-8 text-center lg:text-left tracking-wide">
-                All prices in KES · Inclusive of 16% VAT &amp; 2% Catering Levy
-              </p>
+              <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-6 border-t border-slate-200 pt-8">
+                <p className="text-xs text-slate-400 font-medium tracking-wide uppercase text-center sm:text-left">
+                  ALL PRICES KES • INC. 16% VAT & 2% LEVY
+                </p>
+                <a
+                  href="/menu"
+                  className="group inline-flex items-center justify-center gap-2 text-sm font-bold uppercase tracking-widest text-slate-900 border-b-2 border-slate-900 pb-1 hover:text-brand hover:border-brand transition-colors cursor-pointer"
+                >
+                  View Full Menu
+                  <HiOutlineChevronRight className="size-4 group-hover:translate-x-1 transition-transform cursor-pointer" />
+                </a>
+              </div>
+            </div>
+
+            {/* ── Image Display (Right Column) ── */}
+            <div className="lg:col-span-5 relative w-full min-h-87.5 md:min-h-125 h-full mt-8 lg:mt-0 lg:order-last order-first mb-4 lg:mb-0 transition-all duration-800 ease-in-out">
+              <div className="absolute inset-0 rounded-[2rem] overflow-hidden shadow-xl ring-1 ring-black/5 transform rotate-2 hover:rotate-0 transition-all duration-800 cursor-pointer group">
+                <Image
+                  key={`hero-${bgImage}`}
+                  src={bgImage}
+                  alt={cat.category}
+                  fill
+                  className="object-cover object-center animate-menu-fade-in group-hover:scale-105 transition-transform duration-[2s] ease-out cursor-pointer"
+                  sizes="(min-width: 1024px) 40vw, 100vw"
+                />
+
+                {/* Soft gradient overlay for elegance */}
+                <div className="absolute inset-0 bg-linear-to-b from-black/10 via-transparent to-black/40 transition-opacity duration-700" />
+
+                {/* Decorative borders */}
+                <div className="absolute inset-4 rounded-[1.5rem] border border-white/20 pointer-events-none transition-all duration-700" />
+              </div>
+
+              {/* Backing shadow/shape element for depth */}
+              <div className="absolute -inset-4 bg-brand/5 rounded-[3rem] -z-10 transform -rotate-3 blur-sm cursor-pointer transition-all duration-700" />
             </div>
           </div>
         </div>

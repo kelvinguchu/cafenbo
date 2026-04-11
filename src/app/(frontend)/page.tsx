@@ -12,8 +12,8 @@ export default async function HomePage() {
   return (
     <>
       <Hero />
-      <About />
       <VisualMenu menu={menu} />
+      <About />
       <WhyUs />
       <Reservation />
       <Contact />
