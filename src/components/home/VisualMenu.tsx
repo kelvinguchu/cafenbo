@@ -9,6 +9,7 @@ import {
   HiOutlineSparkles,
 } from 'react-icons/hi2'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { MenuImagePreloader } from '@/components/menu/MenuImagePreloader'
 import type { MenuCategory } from '@/lib/getMenu'
 
 type Props = {
@@ -63,12 +64,7 @@ export function VisualMenu({ menu }: Readonly<Props>) {
 
   return (
     <section id="menu" className="relative overflow-hidden bg-slate-50">
-      {/* Preload all images in a hidden div */}
-      <div className="hidden" aria-hidden="true">
-        {ALL_IMAGES.map((src) => (
-          <Image key={src} src={src} alt="" width={1} height={1} priority />
-        ))}
-      </div>
+      <MenuImagePreloader imageUrls={ALL_IMAGES} />
 
       <div className="relative z-10 py-8 md:py-12">
         <div className="container-site max-w-7xl">

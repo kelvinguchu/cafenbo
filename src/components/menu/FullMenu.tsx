@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import { HiOutlineSparkles } from 'react-icons/hi2'
+import { MenuImagePreloader } from '@/components/menu/MenuImagePreloader'
 import type { MenuCategory } from '@/lib/getMenu'
 
 type Props = {
@@ -25,6 +26,8 @@ const CATEGORY_IMAGES: Record<string, string> = {
   'main-dishes': '/images-webp/KVK03230.webp',
 }
 
+const ALL_IMAGES = Array.from(new Set(['/images-webp/brunch.webp', ...Object.values(CATEGORY_IMAGES)]))
+
 export function FullMenu({ menu }: Readonly<Props>) {
   if (!menu.length) return null
 
@@ -40,6 +43,8 @@ export function FullMenu({ menu }: Readonly<Props>) {
 
   return (
     <div className="bg-slate-50 min-h-screen font-sans w-full overflow-x-hidden">
+      <MenuImagePreloader imageUrls={ALL_IMAGES} />
+
       {/* ── Page Header ── */}
       <header className="relative h-screen  flex items-center overflow-hidden">
         <Image
