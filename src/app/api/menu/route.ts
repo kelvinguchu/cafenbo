@@ -1,5 +1,6 @@
-export { MENU_REVALIDATE_SECONDS as revalidate } from '@/lib/getMenu'
-import { MENU_REVALIDATE_SECONDS, getMenu } from '@/lib/getMenu'
+import { getMenu } from '@/lib/getMenu'
+
+export const revalidate = 300
 
 export async function GET() {
   try {
@@ -9,7 +10,7 @@ export async function GET() {
       { menu },
       {
         headers: {
-          'Cache-Control': `public, s-maxage=${MENU_REVALIDATE_SECONDS}, stale-while-revalidate=86400`,
+          'Cache-Control': `public, s-maxage=${revalidate}, stale-while-revalidate=86400`,
         },
       },
     )
