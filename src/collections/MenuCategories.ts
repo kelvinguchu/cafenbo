@@ -52,8 +52,8 @@ export const MenuCategories: CollectionConfig = {
         if (data?.name && (operation === 'create' || !data.slug)) {
           data.slug = data.name
             .toLowerCase()
-            .replace(/[^a-z0-9]+/g, '-')
-            .replace(/(^-|-$)/g, '')
+            .replaceAll(/[^a-z0-9]+/g, '-')
+            .replaceAll(/(^-|-$)/g, '')
         }
         return data
       },
