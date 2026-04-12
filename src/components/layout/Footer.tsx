@@ -60,12 +60,8 @@ export function Footer() {
             </h4>
             <div className="space-y-4">
               <div>
-                <p className="text-sm font-medium text-stone-800">Monday — Friday</p>
+                <p className="text-sm font-medium text-stone-800">Monday — Sunday</p>
                 <p className="text-sm text-stone-500">7:00 AM — 11:00 PM</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-stone-800">Weekends &amp; Holidays</p>
-                <p className="text-sm text-stone-500">8:00 AM — 10:00 PM</p>
               </div>
             </div>
           </div>
