@@ -20,33 +20,12 @@ export type MenuCategory = {
   items: MenuItem[]
 }
 
-const resolveServerOrigin = () => {
-  const fallbackOrigin = 'http://localhost:3000'
-  const configuredOrigin = process.env.NEXT_PUBLIC_SERVER_URL?.trim()
-
-  if (!configuredOrigin) return fallbackOrigin
-
-  try {
-    return new URL(configuredOrigin).origin
-  } catch {
-    return fallbackOrigin
-  }
-}
-
 const toImagePath = (imageName: string | null | undefined) => {
   if (!imageName) return null
 
   const normalizedImageName = imageName.replace(/^\/+/, '')
 
   return `/images-webp/${normalizedImageName}`
-}
-
-const toImageUrl = (imageName: string | null | undefined) => {
-  const imagePath = toImagePath(imageName)
-
-  if (!imagePath) return null
-
-  return new URL(imagePath, resolveServerOrigin()).toString()
 }
 
 const loadMenu = async (): Promise<MenuCategory[]> => {
@@ -97,7 +76,7 @@ const loadMenu = async (): Promise<MenuCategory[]> => {
       category: category.name,
       slug: category.slug || '',
       image: toImagePath(category.image),
-      imageUrl: toImageUrl(category.image),
+      imageUrl: null,
       items: itemsByCategory.get(category.id) ?? [],
     }))
     .filter((category) => category.items.length > 0)
