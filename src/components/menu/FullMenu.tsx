@@ -10,9 +10,9 @@ type Props = {
 }
 
 const CATEGORY_IMAGES: Record<string, string> = {
-  'coffee': '/images-webp/coffee.webp',
+  coffee: '/images-webp/coffee.webp',
   tea: '/images-webp/tea.webp',
-  pastries: '/images-webp/KVK03089.webp',
+  pastries: '/images-webp/pastries.webp',
   breakfast: '/images-webp/breakfast4.webp',
   'sweet-treats': '/images-webp/KVK03118.webp',
   starters: '/images-webp/KVK03133.webp',
@@ -26,7 +26,9 @@ const CATEGORY_IMAGES: Record<string, string> = {
   'main-dishes': '/images-webp/KVK03230.webp',
 }
 
-const ALL_IMAGES = Array.from(new Set(['/images-webp/brunch.webp', ...Object.values(CATEGORY_IMAGES)]))
+const ALL_IMAGES = Array.from(
+  new Set(['/images-webp/brunch.webp', ...Object.values(CATEGORY_IMAGES)]),
+)
 
 export function FullMenu({ menu }: Readonly<Props>) {
   if (!menu.length) return null

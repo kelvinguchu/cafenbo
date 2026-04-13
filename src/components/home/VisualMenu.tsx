@@ -19,7 +19,7 @@ type Props = {
 const CATEGORY_IMAGES: Record<string, string> = {
   coffee: '/images-webp/coffee.webp',
   tea: '/images-webp/tea.webp',
-  pastries: '/images-webp/KVK03089.webp',
+  pastries: '/images-webp/pastries.webp',
   breakfast: '/images-webp/breakfast4.webp',
   'sweet-treats': '/images-webp/KVK03118.webp',
   starters: '/images-webp/KVK03133.webp',
