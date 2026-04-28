@@ -2,117 +2,526 @@ import 'dotenv/config'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 
-const CATEGORIES = [
-  { name: 'Coffee', sortOrder: 1, image: null },
-  { name: 'Tea', sortOrder: 2, image: null },
-  { name: 'Pastries', sortOrder: 3, image: null },
-  { name: 'Breakfast', sortOrder: 4, image: 'breakfast.webp' },
-  { name: 'Sweet Treats', sortOrder: 5, image: null },
-  { name: 'Starters', sortOrder: 6, image: 'breakfast2.webp' },
-  { name: 'Sandwiches', sortOrder: 7, image: 'breakfast3.webp' },
-  { name: 'Burgers', sortOrder: 8, image: null },
-  { name: 'Salads', sortOrder: 9, image: 'pilau-closeup.webp' },
-  { name: 'Pasta', sortOrder: 10, image: null },
-  { name: 'Charcoal Over Pizza', sortOrder: 11, image: 'pizza.webp' },
-  { name: 'Clay Oven', sortOrder: 12, image: 'pilau-side.webp' },
-  { name: 'Main Dishes', sortOrder: 13, image: 'pilau.webp' },
-]
+type SeedPriceVariant = {
+  label: string
+  price: number
+}
 
-type SeedItem = { name: string; price: number; description?: string; sortOrder: number }
+type SeedCategory = {
+  name: string
+  sortOrder: number
+  image: string | null
+}
+
+type SeedItem = {
+  name: string
+  price: number
+  description?: string
+  priceVariants?: SeedPriceVariant[]
+  sortOrder: number
+}
+
+const CATEGORIES = [
+  { name: 'Coffee', sortOrder: 1, image: 'coffee.webp' },
+  { name: 'Tea', sortOrder: 2, image: 'tea.webp' },
+  { name: 'Soft Drinks', sortOrder: 3, image: 'drink.webp' },
+  { name: 'Cold Drinks', sortOrder: 4, image: 'drink.webp' },
+  { name: 'Bakery', sortOrder: 5, image: 'cake.webp' },
+  { name: 'All Day Breakfast', sortOrder: 6, image: 'pancakes-and-coffee.webp' },
+  { name: 'Starters', sortOrder: 7, image: 'starters.webp' },
+  { name: 'Sandwiches', sortOrder: 8, image: 'sandwiches.webp' },
+  { name: 'Burgers', sortOrder: 9, image: 'burgers.webp' },
+  { name: 'Salads', sortOrder: 10, image: 'salad.webp' },
+  { name: 'Pasta', sortOrder: 11, image: 'pasta.webp' },
+  { name: 'Charcoal Oven Pizza', sortOrder: 12, image: 'pizza.webp' },
+  { name: 'Clay Oven & Indian Cuisine', sortOrder: 13, image: 'clay-pot-rice.webp' },
+  { name: 'Extras', sortOrder: 14, image: 'lunch.webp' },
+  { name: 'NBO Main Dishes', sortOrder: 15, image: 'rice-chicken-tray.webp' },
+] satisfies SeedCategory[]
 
 const ITEMS: Record<string, SeedItem[]> = {
   Coffee: [
-    { name: 'Espresso', price: 250, sortOrder: 1 },
-    { name: 'Americano', price: 300, sortOrder: 2 },
-    { name: 'Cappuccino', price: 350, sortOrder: 3 },
-    { name: 'Caffe Latte', price: 350, sortOrder: 4 },
-    { name: 'Latte Macchiato', price: 350, sortOrder: 5 },
-    { name: 'Mocha', price: 400, sortOrder: 6 },
-    { name: 'Hot Chocolate', price: 400, sortOrder: 7 },
-    { name: 'Flavoured Latte', price: 450, sortOrder: 8 },
+    {
+      name: 'Espresso',
+      price: 200,
+      priceVariants: [
+        { label: 'Single', price: 200 },
+        { label: 'Double', price: 250 },
+      ],
+      sortOrder: 1,
+    },
+    {
+      name: 'Americano',
+      price: 250,
+      priceVariants: [
+        { label: 'Single', price: 250 },
+        { label: 'Double', price: 300 },
+      ],
+      sortOrder: 2,
+    },
+    {
+      name: 'Cappuccino',
+      price: 290,
+      priceVariants: [
+        { label: 'Single', price: 290 },
+        { label: 'Double', price: 350 },
+      ],
+      sortOrder: 3,
+    },
+    {
+      name: 'Caffe Latte',
+      price: 290,
+      priceVariants: [
+        { label: 'Single', price: 290 },
+        { label: 'Double', price: 350 },
+      ],
+      sortOrder: 4,
+    },
+    {
+      name: 'Latte Macchiato',
+      price: 290,
+      priceVariants: [
+        { label: 'Single', price: 290 },
+        { label: 'Double', price: 350 },
+      ],
+      sortOrder: 5,
+    },
+    { name: 'Caffe Mocha', price: 400, sortOrder: 6 },
+    { name: 'Flavoured Latte', price: 450, sortOrder: 7 },
+    { name: 'Spanish Latte', price: 500, sortOrder: 8 },
   ],
   Tea: [
-    { name: 'Kenyan Tea', price: 250, sortOrder: 1 },
-    { name: 'Brewed Somali Tea', price: 250, sortOrder: 2 },
-    { name: 'Flavoured Kenyan Tea', price: 250, sortOrder: 3 },
-    { name: 'Masala Tea', price: 300, sortOrder: 4 },
-    { name: 'Dawa Tea', price: 300, sortOrder: 5 },
+    { name: 'Karak Tea', price: 300, sortOrder: 1 },
+    { name: 'Adrak Tea', price: 300, sortOrder: 2 },
+    { name: 'Brewed Kenyan Tea', price: 250, sortOrder: 3 },
+    { name: 'Brewed Somali Tea', price: 250, sortOrder: 4 },
+    { name: 'Masala Tea', price: 250, sortOrder: 5 },
+    { name: 'Camel Tea', price: 300, sortOrder: 6 },
+    { name: 'Saffron Tea', price: 350, sortOrder: 7 },
+    { name: 'Hot Chocolate', price: 350, sortOrder: 8 },
+    { name: 'Moroccan Mint', price: 300, sortOrder: 9 },
+    { name: 'Green Tea', price: 250, sortOrder: 10 },
+    { name: 'Chamomile Tea', price: 250, sortOrder: 11 },
+    { name: 'Earl Grey Tea', price: 250, sortOrder: 12 },
+    { name: 'Hibiscus Tea', price: 250, sortOrder: 13 },
+    { name: 'Dawa Tea', price: 300, sortOrder: 14 },
+    { name: 'Cinnamon / Orange Dawa', price: 300, sortOrder: 15 },
+    { name: 'Hot Matcha Tea', price: 500, sortOrder: 16 },
   ],
-  Pastries: [
-    { name: 'Cinnamon Roll', price: 200, sortOrder: 1 },
-    { name: 'Butter Croissant', price: 220, sortOrder: 2 },
-    { name: 'Chocolate Croissant', price: 250, sortOrder: 3 },
-    { name: 'Almond Croissant', price: 280, sortOrder: 4 },
+  'Soft Drinks': [
+    {
+      name: 'Coke / Fanta / Sprite / Bitter Lemon / Coke Zero / Stoney',
+      price: 200,
+      sortOrder: 1,
+    },
+    { name: 'Still Water (500ml)', price: 200, sortOrder: 2 },
+    { name: 'Still Water (1 Litre)', price: 250, sortOrder: 3 },
+    { name: 'Sparkling Water (500ml)', price: 250, sortOrder: 4 },
+    { name: 'Sparkling Water (1 Litre)', price: 300, sortOrder: 5 },
+    {
+      name: 'Freshly Squeezed Juice',
+      price: 500,
+      description: 'Choose from mango, passion, pineapple, or orange.',
+      sortOrder: 6,
+    },
   ],
-  Breakfast: [
-    { name: 'Tropical Fruit Salad', price: 650, description: 'A vibrant mix of seasonal tropical fruits, refreshing and healthy topped with option of yoghurt or nuts.', sortOrder: 1 },
-    { name: 'Breakfast Wrap', price: 720, description: 'A hearty flat bread wrap filled with a plain omelette, vegetables, and chicken.', sortOrder: 2 },
-    { name: 'Mediterranean Scramble', price: 750, description: 'Creamy scrambled eggs paired with fresh Mediterranean ingredients like spinach, feta, and olives.', sortOrder: 3 },
-    { name: 'Granola Bowl', price: 780, description: 'Crunchy granola layered with creamy yogurt and juicy fresh fruits topped with a drizzle of Kenyan honey.', sortOrder: 4 },
-    { name: 'Shakshouka', price: 850, description: 'A Middle Eastern favorite with poached eggs in a savory tomato sauce, bell peppers, and spice medley.', sortOrder: 5 },
-    { name: 'Eggs Benedict', price: 900, description: 'A classic featuring poached eggs and ham or smoked salmon atop an English muffin, crowned with rich hollandaise.', sortOrder: 6 },
-    { name: 'English Breakfast', price: 950, description: 'A warm cast iron plate of eggs, sausages, beef bacon, baked beans, grilled tomatoes, and toasted bread or naan.', sortOrder: 7 },
-    { name: 'Mushroom on Toast', price: 950, description: 'Toasted multicereal bread topped with sautéed creamy mushrooms, garnished with fresh herbs.', sortOrder: 8 },
+  'Cold Drinks': [
+    {
+      name: 'Classic Shake',
+      price: 500,
+      description: 'Choose vanilla, strawberry, or chocolate.',
+      sortOrder: 1,
+    },
+    { name: 'Oreo Shake', price: 550, sortOrder: 2 },
+    { name: 'Coffee Shake', price: 550, sortOrder: 3 },
+    { name: 'Caramel Shake', price: 550, sortOrder: 4 },
+    { name: 'Blueberry Smoothie', price: 550, sortOrder: 5 },
+    { name: 'Strawberry Smoothie', price: 550, sortOrder: 6 },
+    { name: 'Mango Smoothie', price: 550, sortOrder: 7 },
+    { name: 'Banana Smoothie', price: 550, sortOrder: 8 },
+    { name: 'Classic Mojito / Lemonade', price: 350, sortOrder: 9 },
+    { name: 'Blue Lemonade', price: 400, sortOrder: 10 },
+    { name: 'Passion Mojito', price: 400, sortOrder: 11 },
+    { name: 'Strawberry Mojito', price: 400, sortOrder: 12 },
+    { name: 'Pineapple Mojito', price: 400, sortOrder: 13 },
+    { name: 'Pina Colada', price: 450, sortOrder: 14 },
+    { name: 'Sunrise', price: 400, sortOrder: 15 },
+    { name: 'Mango Ginger Fizz', price: 450, sortOrder: 16 },
+    { name: 'Passion Paradise', price: 400, sortOrder: 17 },
+    { name: 'Iced Flavoured Matcha Tea', price: 650, sortOrder: 18 },
   ],
-  'Sweet Treats': [
-    { name: 'NBO Pancakes', price: 650, description: 'Fluffy and light pancakes served with your choice of syrups, fruits, or other delicious toppings.', sortOrder: 1 },
-    { name: 'Crepe', price: 650, description: 'Thin pancakes served with assorted fruits and whipping cream, maple or honey.', sortOrder: 2 },
-    { name: 'French Toast', price: 850, description: 'Thick slices of bread dipped in egg batter, pan-fried until golden, and served with sweet toppings.', sortOrder: 3 },
+  Bakery: [
+    { name: 'Tiramisu Cake', price: 400, sortOrder: 1 },
+    { name: 'White / Black Forest Cake', price: 450, sortOrder: 2 },
+    { name: 'Red Velvet Cake', price: 450, sortOrder: 3 },
+    { name: 'Mexican Brownie', price: 450, sortOrder: 4 },
+    { name: 'Cake Slice of the Day', price: 400, sortOrder: 5 },
+    { name: 'Assorted Muffins', price: 200, sortOrder: 6 },
+    {
+      name: 'Cookies',
+      price: 50,
+      description: 'Different flavours available.',
+      sortOrder: 7,
+    },
+  ],
+  'All Day Breakfast': [
+    {
+      name: 'Your Choice of Omelette',
+      price: 650,
+      description: '3 egg omelette served with home fries, toast, butter and jam.',
+      sortOrder: 1,
+    },
+    {
+      name: 'Morning Booster',
+      price: 500,
+      description: '2 eggs, french fries and sausage.',
+      sortOrder: 2,
+    },
+    {
+      name: 'English Breakfast',
+      price: 1050,
+      description:
+        'A plate of eggs, sausages, beef bacon, baked beans, grilled tomatoes and toasted bread.',
+      sortOrder: 3,
+    },
+    {
+      name: 'Mixed Fruit Salad',
+      price: 650,
+      description:
+        'A vibrant mix of seasonal tropical fruits, refreshing and healthy, topped with yogurt or nuts.',
+      sortOrder: 4,
+    },
+    {
+      name: 'Spanish Breakfast',
+      price: 750,
+      description:
+        'A Middle Eastern favorite with poached eggs in a savory tomato sauce, bell peppers and a spice medley.',
+      sortOrder: 5,
+    },
+    {
+      name: 'Granola Bowl',
+      price: 750,
+      description:
+        'Crunchy granola layered with creamy yogurt and juicy fresh fruits topped with a drizzle of Kenyan honey.',
+      sortOrder: 6,
+    },
+    {
+      name: 'NBO Pancakes',
+      price: 900,
+      description:
+        'Fluffy and light pancakes served with syrups, fruits, or other delicious toppings.',
+      sortOrder: 7,
+    },
+    {
+      name: 'Malawa',
+      price: 500,
+      description: 'Thin Somali-style pancakes served with honey.',
+      sortOrder: 8,
+    },
+    {
+      name: 'French Toast',
+      price: 990,
+      description:
+        'Thick slices of bread dipped in egg butter, pan-fried until golden brown and served with sweet toppings.',
+      sortOrder: 9,
+    },
+    { name: 'Kheema Chapati (Beef or Chicken)', price: 650, sortOrder: 10 },
   ],
   Starters: [
-    { name: 'French Fries', price: 350, description: 'Classic potato sticks fried to perfection, crisp and salty.', sortOrder: 1 },
-    { name: 'Bhajia', price: 400, description: 'Golden-fried slices of vegetables coated in a spiced gram flour batter.', sortOrder: 2 },
-    { name: 'Soup of the Day', price: 450, description: 'Daily fresh-made soup crafted from seasonal ingredients.', sortOrder: 3 },
-    { name: 'Samosa', price: 450, description: 'Three pieces of crispy pastry pockets filled with spiced meat or vegetables.', sortOrder: 4 },
-    { name: 'Sticky Wings', price: 950, description: 'Juicy sweet and spicy 12 pieces of chicken wings drizzled with sesame seeds.', sortOrder: 5 },
+    {
+      name: 'French Fries',
+      price: 300,
+      description: 'Classic potato sticks fried to perfection, crispy and salty.',
+      sortOrder: 1,
+    },
+    {
+      name: 'Bhajia',
+      price: 400,
+      description: 'Golden-fried slices of potatoes coated in a spiced gram flour batter.',
+      sortOrder: 2,
+    },
+    {
+      name: 'Soup of the Day',
+      price: 400,
+      description: 'Daily fresh-made soup crafted from seasonal ingredients.',
+      sortOrder: 3,
+    },
+    {
+      name: 'Sticky / Dry Wings',
+      price: 650,
+      description:
+        'Juicy sweet or dry and spicy chicken wings, served as 6 pieces and drizzled with sesame.',
+      sortOrder: 4,
+    },
+    { name: 'Masala Chips', price: 350, sortOrder: 5 },
+    { name: 'Lemon and Garlic Chips', price: 350, sortOrder: 6 },
+    { name: 'Paprika Fries', price: 350, sortOrder: 7 },
+    { name: 'Peri-peri Fries', price: 350, sortOrder: 8 },
+    { name: 'Vegetable Spring Rolls', price: 350, sortOrder: 9 },
+    { name: 'Meat Samosa (Chicken or Beef)', price: 450, sortOrder: 10 },
   ],
   Sandwiches: [
-    { name: 'Caesar Roll-Up', price: 950, description: 'A soft tortilla wrap packed with Caesar-dressed chicken, lettuce and crisp vegetables.', sortOrder: 1 },
-    { name: 'Chicken Tikka Sandwich', price: 980, description: 'Juicy, spiced charcoal-roasted chicken tikka in a flatbread, lettuce, tomatoes and mixed peppers paired with a raita sauce.', sortOrder: 2 },
-    { name: 'NBO Club Sandwich', price: 1050, description: 'A stacked sandwich with layers of chicken, beef bacon, lettuce, tomato, onions, boiled egg and mayo.', sortOrder: 3 },
-    { name: 'Steak Sandwich', price: 1150, description: 'Tender beef steak slices layered with onions, lettuce, tomatoes and Thousand Island sauce in flatbread.', sortOrder: 4 },
+    {
+      name: 'Smoked Chicken Sandwich',
+      price: 950,
+      description:
+        'A smoked chicken breast with a combination of vegetables, served with chips or salad, cocktail sauce and coleslaw.',
+      sortOrder: 1,
+    },
+    {
+      name: 'Chicken Wrap',
+      price: 950,
+      description:
+        'A soft tortilla wrap packed with Caesar-dressed chicken, lettuce and kachumbari, served with chips or salad, cocktail sauce and coleslaw.',
+      sortOrder: 2,
+    },
+    {
+      name: 'Chicken Tikka Sandwich',
+      price: 980,
+      description:
+        'Juicy spiced charcoal-roasted chicken tikka in flatbread with lettuce, tomatoes and mixed peppers, paired with raita sauce and served with chips or salad, cocktail sauce and coleslaw.',
+      sortOrder: 3,
+    },
+    {
+      name: 'NBO Club Sandwich',
+      price: 1050,
+      description:
+        'A stacked sandwich with chicken, beef bacon, lettuce, tomatoes, onions, fried egg and mayo, served with chips or salad, cocktail sauce and coleslaw.',
+      sortOrder: 4,
+    },
+    {
+      name: 'Steak Sandwich',
+      price: 1150,
+      description:
+        'Tender beef steak slices layered with onions, lettuce, tomatoes and Thousand Island sauce in flatbread, served with chips or salad, cocktail sauce and coleslaw.',
+      sortOrder: 5,
+    },
   ],
   Burgers: [
-    { name: 'Veg Burger', price: 650, description: 'A wholesome vegetarian patty made with fresh veggies, beans, or grains.', sortOrder: 1 },
-    { name: 'Classic Chicken Burger', price: 850, description: 'A succulent breaded or grilled chicken patty with lettuce and mayo.', sortOrder: 2 },
-    { name: 'Beef Burger', price: 950, description: 'A classic grilled beef patty loaded with fresh toppings and condiments.', sortOrder: 3 },
-    { name: 'Curried Chicken Burger', price: 1050, description: 'An exciting burger with a curried chicken patty for a bold flavor.', sortOrder: 4 },
+    {
+      name: 'Veg Burger',
+      price: 700,
+      description: 'A wholesome vegetarian patty made with fresh veggies, beans or grains.',
+      sortOrder: 1,
+    },
+    {
+      name: 'Classic Chicken Burger',
+      price: 990,
+      description: 'A succulent breaded or grilled chicken patty with lettuce and mayo.',
+      sortOrder: 2,
+    },
+    {
+      name: 'Beef Burger',
+      price: 990,
+      description: 'A classic beef patty loaded with fresh toppings and condiments.',
+      sortOrder: 3,
+    },
+    {
+      name: 'Double Trouble Burger',
+      price: 1250,
+      description: 'Two classic beef patties loaded with mushroom and guacamole.',
+      sortOrder: 4,
+    },
+    {
+      name: 'Texas Burger',
+      price: 1050,
+      description: 'Classic beef patty loaded with cheese, eggs and beef bacon.',
+      sortOrder: 5,
+    },
+    {
+      name: 'Burger King',
+      price: 1350,
+      description: 'Two classic patties loaded with cheese, beef bacon, guacamole and eggs.',
+      sortOrder: 6,
+    },
   ],
   Salads: [
-    { name: 'Greek Salad', price: 850, description: 'A vibrant mix of tomatoes, cucumbers, olives, onions, and feta cheese.', sortOrder: 1 },
-    { name: 'Garden Salad', price: 850, description: 'A light mix of fresh greens, tomatoes, cucumbers, and vinaigrette.', sortOrder: 2 },
-    { name: 'Caesar Salad', price: 950, description: 'A timeless combination of crunchy iceberg lettuce, Caesar dressing, parmesan, and croutons.', sortOrder: 3 },
-    { name: 'Nicoise Salad', price: 1050, description: 'A wholesome salad with tuna, hard-boiled eggs, and a medley of fresh veggies.', sortOrder: 4 },
+    {
+      name: 'Garden Salad',
+      price: 750,
+      description: 'A light mix of fresh greens, tomatoes, cucumber and vinaigrette.',
+      sortOrder: 1,
+    },
+    {
+      name: 'Caesar Salad Vegetarian',
+      price: 850,
+      description:
+        'A timeless combination of crunchy iceberg lettuce, Caesar dressing, Parmesan and croutons.',
+      sortOrder: 2,
+    },
+    {
+      name: 'Caesar Salad Chicken',
+      price: 1100,
+      description:
+        'A timeless combination of crunchy iceberg lettuce, Caesar dressing, Parmesan and croutons with chicken.',
+      sortOrder: 3,
+    },
+    {
+      name: 'Mexican Salad',
+      price: 1050,
+      description:
+        'A combination of lettuce, cheddar cheese, avocado, sweetcorn, roasted cauliflower, chicken and black beans.',
+      sortOrder: 4,
+    },
+    {
+      name: 'Cobb Salad',
+      price: 1250,
+      description:
+        'A combination of lettuce, tomatoes, beef bacon, chicken, avocado, cheese and boiled eggs.',
+      sortOrder: 5,
+    },
   ],
   Pasta: [
-    { name: 'Penne Arrabiata', price: 830, description: 'Penne pasta in a tangy tomato and chili sauce with parmesan cheese and a spicy kick.', sortOrder: 1 },
-    { name: 'Spaghetti Bolognese', price: 850, description: 'Pasta served with a rich Bolognese sauce with tomato.', sortOrder: 2 },
-    { name: 'Penne Alfredo Mushroom', price: 950, description: 'Creamy Alfredo sauce with sautéed mushrooms or chicken and penne pasta.', sortOrder: 3 },
-    { name: 'Carbonara', price: 1050, description: 'A creamy linguine pasta dish with egg, cheese, and crispy bacon.', sortOrder: 4 },
+    {
+      name: 'Spaghetti Bolognese',
+      price: 990,
+      description: 'Pasta served with a rich ragu sauce and Parmesan cheese.',
+      sortOrder: 1,
+    },
+    {
+      name: 'Pasta Alfredo Mushroom',
+      price: 1300,
+      description:
+        'Creamy Alfredo sauce with sauteed mushrooms, chicken and pasta of your choice, finished with Parmesan cheese.',
+      sortOrder: 2,
+    },
+    {
+      name: 'Pasta Saldado',
+      price: 1200,
+      description: 'Linguine pasta cooked in red sauce, served with chicken or fish fillet.',
+      sortOrder: 3,
+    },
+    {
+      name: 'Curried Pasta',
+      price: 1200,
+      description: 'Linguine pasta cooked in curry sauce, served with chicken or fish fillet.',
+      sortOrder: 4,
+    },
   ],
-  'Charcoal Over Pizza': [
-    { name: 'Margarita', price: 1150, description: 'A simple yet delicious pizza with pomodoro sauce, mozzarella, and basil.', sortOrder: 1 },
-    { name: 'Duo Cheese', price: 1250, description: 'A cheesy combination of mozzarella and feta cheese on pomodoro sauce, oregano, and rocket leaves.', sortOrder: 2 },
-    { name: 'Hawaiian', price: 1250, description: 'Sweet and savory pizza with beef bacon, pomodoro, mozzarella cheese and pineapple toppings.', sortOrder: 3 },
-    { name: 'Chicken Tikka', price: 1350, description: 'Pizza topped with smoky, spiced chicken tikka, mozzarella cheese and pomodoro sauce.', sortOrder: 4 },
-    { name: 'Peri-Peri', price: 1350, description: 'A fiery pizza with peri-peri spiced chicken with coriander and sweet peppers toppings.', sortOrder: 5 },
-    { name: 'Tuna', price: 1350, description: 'A fresh and flavorful pizza featuring tuna chunks, mozzarella, pomodoro sauce, black olives and onions.', sortOrder: 6 },
-    { name: 'Meat Lovers', price: 1400, description: 'Packed with chicken, beef and beef bacon for the ultimate carnivore delight. Mozzarella cheese and pomodoro sauce.', sortOrder: 7 },
+  'Charcoal Oven Pizza': [
+    {
+      name: 'Margarita',
+      price: 1050,
+      description: 'A simple yet delicious pizza with pomodoro sauce, mozzarella and basil.',
+      sortOrder: 1,
+    },
+    {
+      name: 'Hawaiian',
+      price: 1400,
+      description:
+        'Sweet and savory pizza with beef bacon, chicken, mushrooms, pomodoro, pineapple toppings and mozzarella cheese.',
+      sortOrder: 2,
+    },
+    {
+      name: 'Chicken Tikka',
+      price: 1250,
+      description:
+        'Pizza topped with fresh chillies, onions, sweet peppers, spiced chicken tikka, pomodoro sauce and mozzarella cheese.',
+      sortOrder: 3,
+    },
+    {
+      name: 'Chicken BBQ',
+      price: 1200,
+      description:
+        'A delicious pizza with barbecue sauce, chicken breast in BBQ sauce and mozzarella cheese.',
+      sortOrder: 4,
+    },
+    {
+      name: 'Half and Half',
+      price: 1300,
+      description:
+        'A combination of chicken and beef pizza with pomodoro sauce and mozzarella cheese.',
+      sortOrder: 5,
+    },
   ],
-  'Clay Oven': [
-    { name: 'Mugh e Tandoor', price: 1250, description: 'Succulent tandoori-roasted chicken marinated in bold spices.', sortOrder: 1 },
-    { name: 'Mugh Tikka Shole', price: 1300, description: 'Spiced chunks of chicken thighs in tikka marinades grilled in a traditional tandoor.', sortOrder: 2 },
-    { name: 'Tandoori Lamb Chops', price: 1500, description: 'Lightly marinated lamb chops roasted in a traditional tandoori.', sortOrder: 3 },
-    { name: 'Tarah Tarah Platter', price: 1800, description: 'A mixed platter showcasing an array of tandoori specialties. Chicken tikka, roasted chicken, lamb kebab and tikka wings.', sortOrder: 4 },
+  'Clay Oven & Indian Cuisine': [
+    {
+      name: 'Murgh-e-Tandoor',
+      price: 950,
+      priceVariants: [
+        { label: '1/4', price: 950 },
+        { label: '1/2', price: 1250 },
+      ],
+      description: 'Succulent tandoori-roasted chicken marinated in bold spices.',
+      sortOrder: 1,
+    },
+    {
+      name: 'Tarah Tarah Platter',
+      price: 3400,
+      description:
+        'A mixed platter showcasing an array of tandoori specialties: chicken tikka, roasted beef, lamb kebab and tikka wings.',
+      sortOrder: 2,
+    },
+    { name: 'Butter Chicken', price: 1200, sortOrder: 3 },
+    {
+      name: 'Swahili Biryani (Chicken / Mutton / Beef)',
+      price: 1300,
+      description:
+        'Fragrant, spiced rice with tender meat of your choice in Swahili style. Served with raita and kachumbari.',
+      sortOrder: 4,
+    },
+    { name: 'Pilau (Beef / Mutton / Chicken)', price: 1300, sortOrder: 5 },
+    { name: 'Grilled Mshikaki (Beef / Chicken / Mutton)', price: 990, sortOrder: 6 },
+    { name: 'Sheesh Kebab - Chicken', price: 990, sortOrder: 7 },
+    {
+      name: 'Beef / Chicken Curry',
+      price: 1200,
+      description:
+        'Cooked in a rich and flavorful yellow creamy curry sauce. Served with accompaniment of your choice.',
+      sortOrder: 8,
+    },
   ],
-  'Main Dishes': [
-    { name: 'Grilled Chicken Breast', price: 1050, description: 'Juicy and flavorful chicken breast, marinated and grilled to perfection. Served with veggies or salad and an accompaniment of choice.', sortOrder: 1 },
-    { name: 'Swahili Biryani', price: 1050, description: 'Fragrant, spiced rice with tender chicken in Swahili style. Served with raita.', sortOrder: 2 },
-    { name: 'Beef Mandi', price: 1050, description: 'Slow-cooked beef served with aromatic rice, seasoned to perfection.', sortOrder: 3 },
-    { name: 'Chicken Curry', price: 1100, description: 'Chicken cooked in a rich and flavorful yellow creamy curry sauce. Served with rice.', sortOrder: 4 },
-    { name: 'Thai Fish Fillet', price: 1250, description: 'A delicate fish fillet cooked in coconut cream infused with Thai flavors and spices. Served with steamed vegetables and rice.', sortOrder: 5 },
-    { name: 'Grilled Beef Fillet', price: 1350, description: 'Tender marinated beef fillet grilled to your liking. Served with veggies, mushroom sauce and accompaniment of choice.', sortOrder: 6 },
-    { name: 'Lamb Leg', price: 1500, description: 'A charcoal-roasted lamb leg. Marinated in fragrant spices and served with roasted vegetables and rice.', sortOrder: 7 },
+  Extras: [
+    { name: 'Chapati', price: 150, sortOrder: 1 },
+    { name: 'Mandazi', price: 100, sortOrder: 2 },
+    { name: 'Vegetable Rice', price: 300, sortOrder: 3 },
+    { name: 'Buttered Naan Bread', price: 150, sortOrder: 4 },
+    { name: 'Creamed Spinach', price: 150, sortOrder: 5 },
+    { name: 'Ugali', price: 100, sortOrder: 6 },
+    { name: 'Kachumbari', price: 100, sortOrder: 7 },
+    { name: 'Sausage (Beef / Chicken)', price: 200, sortOrder: 8 },
+    { name: 'Egg', price: 150, sortOrder: 9 },
+    { name: 'Avocado', price: 100, sortOrder: 10 },
+    { name: 'Plantain', price: 200, sortOrder: 11 },
+    { name: 'Banana', price: 50, sortOrder: 12 },
+    { name: 'Plain White Rice', price: 200, sortOrder: 13 },
+  ],
+  'NBO Main Dishes': [
+    {
+      name: 'Grilled Chicken Breast',
+      price: 1200,
+      description:
+        'Juicy and flavorful chicken breast marinated and grilled to perfection. Served with accompaniment of your choice.',
+      sortOrder: 1,
+    },
+    {
+      name: 'Thai Fish Fillet',
+      price: 1400,
+      description:
+        'A delicate fish fillet simmered in coconut cream sauce infused with Thai flavors and spices.',
+      sortOrder: 2,
+    },
+    {
+      name: 'Grilled Beef Fillet',
+      price: 1550,
+      description:
+        'Tender marinated beef fillet grilled to your liking. Served with veggies, mushroom sauce and accompaniment of your choice.',
+      sortOrder: 3,
+    },
+    {
+      name: 'Lamb / Goat Leg',
+      price: 1690,
+      description:
+        'Slow-cooked lamb or goat leg marinated in fragrant spices and served with sauteed vegetables and rice.',
+      sortOrder: 4,
+    },
+    { name: 'Fish Curry', price: 1350, sortOrder: 5 },
+    {
+      name: 'Chicken Schnitzel',
+      price: 1200,
+      description: 'Flavorful chicken breast dusted in eggs and bread crumbs.',
+      sortOrder: 6,
+    },
   ],
 }
 
@@ -138,24 +547,26 @@ async function seed() {
   // Small delay to let MongoDB finish creating collections
   await new Promise((r) => setTimeout(r, 2000))
 
-  console.log('👤 Creating admin user...')
-  await withRetry(() =>
-    payload.delete({
-      collection: 'users',
-      where: { email: { equals: 'kulmidigital@gmail.com' } },
-    }),
-  )
-  await withRetry(() =>
-    payload.create({
-      collection: 'users',
-      data: {
-        email: 'kulmidigital@gmail.com',
-        password: 'kulmidigital@gmail.com',
-        roles: ['admin'],
-      },
-    }),
-  )
-  console.log('  ✓ Kulmi Digital (admin)')
+  // Admin user creation is disabled so the menu seed can be rerun without
+  // trying to create the first admin account a second time.
+  // console.log('👤 Creating admin user...')
+  // await withRetry(() =>
+  //   payload.delete({
+  //     collection: 'users',
+  //     where: { email: { equals: 'kulmidigital@gmail.com' } },
+  //   }),
+  // )
+  // await withRetry(() =>
+  //   payload.create({
+  //     collection: 'users',
+  //     data: {
+  //       email: 'kulmidigital@gmail.com',
+  //       password: 'kulmidigital@gmail.com',
+  //       roles: ['admin'],
+  //     },
+  //   }),
+  // )
+  // console.log('  ✓ Kulmi Digital (admin)')
 
   console.log('\n🧹 Clearing existing menu data...')
   await withRetry(() =>
@@ -198,6 +609,7 @@ async function seed() {
           name: item.name,
           description: item.description,
           price: item.price,
+          priceVariants: item.priceVariants,
           category: categoryId,
           sortOrder: item.sortOrder,
           available: true,

@@ -9,43 +9,58 @@ type Props = {
   menu: MenuCategory[]
 }
 
-const CATEGORY_IMAGES: Record<string, string> = {
+const FALLBACK_CATEGORY_IMAGES: Record<string, string> = {
   coffee: '/images-webp/coffee.webp',
   tea: '/images-webp/tea.webp',
   pastries: '/images-webp/pastries.webp',
   breakfast: '/images-webp/breakfast4.webp',
-  'sweet-treats': '/images-webp/KVK03118.webp',
-  starters: '/images-webp/KVK03133.webp',
-  sandwiches: '/images-webp/KVK03149.webp',
-  burgers: '/images-webp/KVK03319.webp',
-  salads: '/images-webp/KVK03107.webp',
-  pasta: '/images-webp/KVK03192.webp',
+  'sweet-treats': '/images-webp/cake.webp',
+  'soft-drinks': '/images-webp/softdrink.webp',
+  'cold-drinks': '/images-webp/drink.webp',
+  bakery: '/images-webp/cake.webp',
+  'all-day-breakfast': '/images-webp/pancakes-and-coffee.webp',
+  starters: '/images-webp/starters.webp',
+  sandwiches: '/images-webp/sandwiches.webp',
+  burgers: '/images-webp/burgers.webp',
+  salads: '/images-webp/salad.webp',
+  pasta: '/images-webp/pasta.webp',
   pizza: '/images-webp/pizza.webp',
   'charcoal-over-pizza': '/images-webp/pizza.webp',
-  'clay-oven': '/images-webp/pilau-side.webp',
-  'main-dishes': '/images-webp/KVK03230.webp',
+  'charcoal-oven-pizza': '/images-webp/pizza.webp',
+  'clay-oven': '/images-webp/clay-pot-rice.webp',
+  'clay-oven-indian-cuisine': '/images-webp/clay-pot-rice.webp',
+  extras: '/images-webp/lunch.webp',
+  'main-dishes': '/images-webp/rice-chicken-tray.webp',
+  'nbo-main-dishes': '/images-webp/rice-chicken-tray.webp',
 }
 
-const ALL_IMAGES = Array.from(
-  new Set(['/images-webp/brunch.webp', ...Object.values(CATEGORY_IMAGES)]),
-)
+const getCategoryImage = (category: MenuCategory) =>
+  FALLBACK_CATEGORY_IMAGES[category.slug] ?? category.image ?? null
 
 export function FullMenu({ menu }: Readonly<Props>) {
   if (!menu.length) return null
 
+  const allImages = Array.from(
+    new Set([
+      '/images-webp/brunch.webp',
+      ...menu.map(getCategoryImage).filter((value): value is string => Boolean(value)),
+    ]),
+  )
+
   const scrollToCategory = (id: string) => {
     const el = document.getElementById(id)
     if (el) {
+      const top = el.getBoundingClientRect().top + window.scrollY - 100
       window.scrollTo({
-        top: el.offsetTop - 100,
+        top,
         behavior: 'smooth',
       })
     }
   }
 
   return (
-    <div className="bg-slate-50 min-h-screen font-sans w-full overflow-x-hidden">
-      <MenuImagePreloader imageUrls={ALL_IMAGES} />
+    <div className="bg-slate-50 min-h-screen w-full overflow-x-hidden">
+      <MenuImagePreloader imageUrls={allImages} />
 
       {/* ── Page Header ── */}
       <header className="relative h-screen  flex items-center overflow-hidden">
@@ -91,10 +106,8 @@ export function FullMenu({ menu }: Readonly<Props>) {
           // Alternate layouts based on index for a dynamic tour
           const isEven = index % 2 === 0
 
-          // Strict direct mapping ONLY. No overrides or DB injection.
-          const imageSrc = CATEGORY_IMAGES[cat.slug]
+          const imageSrc = getCategoryImage(cat)
 
-          // Skip rendering section if user did not provide an EXACT mapped image!
           if (!imageSrc) return null
 
           return (
@@ -134,7 +147,7 @@ export function FullMenu({ menu }: Readonly<Props>) {
 
                         <div className="absolute bottom-8 left-8 right-8">
                           <div className="w-12 h-1 bg-brand mb-4 shadow-sm cursor-pointer" />
-                          <h2 className="text-4xl md:text-5xl font-serif text-white mb-2 drop-shadow-lg">
+                          <h2 className="text-4xl md:text-5xl text-white mb-2 drop-shadow-lg">
                             {cat.category}
                           </h2>
                         </div>
@@ -152,15 +165,50 @@ export function FullMenu({ menu }: Readonly<Props>) {
                           </span>
                           <div className="h-px bg-slate-200 flex-1" />
                         </div>
-                        <h2 className="text-5xl font-serif text-slate-800">{cat.category}</h2>
+                        <h2 className="text-5xl text-slate-800">{cat.category}</h2>
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12 mt-6">
+                      <div className="flex flex-col gap-y-4 mt-6">
                         {cat.items.map((item) => {
-                          const hasPromo = item.isPromo && item.promoPrice
+                          const hasPriceVariants = Boolean(item.priceVariants?.length)
+                          const hasPromo = !hasPriceVariants && item.isPromo && item.promoPrice
                           const savedPct = hasPromo
                             ? Math.round(((item.price - item.promoPrice!) / item.price) * 100)
                             : 0
+                          let priceContent: React.ReactNode
+
+                          if (hasPriceVariants) {
+                            priceContent = item.priceVariants!.map((variant) => (
+                              <div
+                                key={`${item.name}-${variant.label}`}
+                                className="flex items-baseline gap-3"
+                              >
+                                <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                                  {variant.label}
+                                </span>
+                                <span className="text-sm font-bold text-slate-700 tabular-nums">
+                                  KES {variant.price.toLocaleString()}
+                                </span>
+                              </div>
+                            ))
+                          } else if (hasPromo) {
+                            priceContent = (
+                              <>
+                                <span className="text-xs text-slate-400 line-through tabular-nums leading-none mb-1">
+                                  KES {item.price.toLocaleString()}
+                                </span>
+                                <span className="text-sm font-bold text-brand tabular-nums">
+                                  KES {item.promoPrice!.toLocaleString()}
+                                </span>
+                              </>
+                            )
+                          } else {
+                            priceContent = (
+                              <span className="text-sm font-bold text-slate-700 tabular-nums">
+                                KES {item.price.toLocaleString()}
+                              </span>
+                            )
+                          }
 
                           return (
                             <div
@@ -168,25 +216,12 @@ export function FullMenu({ menu }: Readonly<Props>) {
                               className="group relative flex flex-col border-b border-slate-200 pb-6 hover:border-brand transition-colors duration-300 cursor-pointer"
                             >
                               <div className="flex justify-between items-start gap-4 mb-2">
-                                <h3 className="text-xl font-medium text-slate-900 font-serif leading-tight group-hover:text-brand transition-colors cursor-pointer">
+                                <h3 className="text-xl font-medium text-slate-900 leading-tight group-hover:text-brand transition-colors cursor-pointer">
                                   {item.name}
                                 </h3>
 
-                                <div className="shrink-0 flex flex-col items-end text-right mt-1">
-                                  {hasPromo ? (
-                                    <>
-                                      <span className="text-xs text-slate-400 line-through tabular-nums leading-none mb-1">
-                                        KES {item.price.toLocaleString()}
-                                      </span>
-                                      <span className="text-sm font-bold text-brand tabular-nums">
-                                        KES {item.promoPrice!.toLocaleString()}
-                                      </span>
-                                    </>
-                                  ) : (
-                                    <span className="text-sm font-bold text-slate-700 tabular-nums">
-                                      KES {item.price.toLocaleString()}
-                                    </span>
-                                  )}
+                                <div className="shrink-0 flex flex-col items-end text-right mt-1 gap-1">
+                                  {priceContent}
                                 </div>
                               </div>
 
@@ -212,7 +247,7 @@ export function FullMenu({ menu }: Readonly<Props>) {
       </main>
 
       {/* ── Footer Info ── */}
-      <div className="bg-slate-50 py-16 text-center border-t border-slate-200 mt-12 pb-24">
+      <div className="bg-slate-50 py-6 text-center border-t border-slate-200 mt-12 pb-24">
         <div className="container-site px-4 flex flex-col items-center">
           <div className="w-16 h-px bg-brand mb-6 cursor-pointer" />
           <h3 className="text-sm text-slate-400 uppercase tracking-widest font-bold mb-4">

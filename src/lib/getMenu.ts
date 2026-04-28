@@ -4,10 +4,16 @@ import config from '@payload-config'
 
 export const MENU_REVALIDATE_SECONDS = 300
 
+export type MenuPriceVariant = {
+  label: string
+  price: number
+}
+
 export type MenuItem = {
   name: string
   description?: string | null
   price: number
+  priceVariants?: MenuPriceVariant[] | null
   promoPrice?: number | null
   isPromo: boolean
 }
@@ -64,6 +70,11 @@ const loadMenu = async (): Promise<MenuCategory[]> => {
       name: item.name,
       description: item.description ?? null,
       price: item.price,
+      priceVariants:
+        item.priceVariants?.map((variant) => ({
+          label: variant.label,
+          price: variant.price,
+        })) ?? null,
       promoPrice: item.promoPrice ?? null,
       isPromo: item.isPromo ?? false,
     })

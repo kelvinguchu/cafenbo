@@ -32,6 +32,24 @@ export default buildConfig({
           url: '/logo.png',
         },
       ],
+      openGraph: {
+        title: 'Café NBO Admin',
+        description: 'Manage the Café NBO menu, reservations and more.',
+        siteName: 'Café NBO',
+        images: [
+          {
+            url: '/logo.png',
+            width: 1200,
+            height: 630,
+          },
+        ],
+      },
+    },
+    components: {
+      graphics: {
+        Logo: '/components/admin/Logo',
+        Icon: '/components/admin/Icon',
+      },
     },
   },
   collections: [Users, Media, MenuCategories, MenuItems, Reservations],
@@ -42,6 +60,9 @@ export default buildConfig({
   },
   db: mongooseAdapter({
     url: process.env.DATABASE_URL || '',
+    connectOptions: {
+      family: 4,
+    },
   }),
   sharp,
   plugins: [],

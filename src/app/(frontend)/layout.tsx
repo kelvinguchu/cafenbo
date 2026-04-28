@@ -1,11 +1,12 @@
 import type { Metadata } from 'next'
 import React from 'react'
-import { Montserrat } from 'next/font/google'
+import { Raleway } from 'next/font/google'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import './styles.css'
 
-const montserrat = Montserrat({
+
+const raleway = Raleway({
   subsets: ['latin'],
   weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
   display: 'swap',
@@ -50,7 +51,7 @@ export default async function RootLayout(props: Readonly<{ children: React.React
 
   return (
     <html lang="en">
-      <body className={montserrat.className}>
+      <body className={raleway.className}>
         <Header />
         {children}
         <Footer />

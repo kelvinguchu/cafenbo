@@ -193,9 +193,19 @@ export interface MenuItem {
   name: string;
   description?: string | null;
   /**
-   * Price in KES
+   * Base price in KES. If variants are set, use the default or lowest price.
    */
   price: number;
+  /**
+   * Optional size or portion prices shown instead of the base price.
+   */
+  priceVariants?:
+    | {
+        label: string;
+        price: number;
+        id?: string | null;
+      }[]
+    | null;
   /**
    * Discounted promo price in KES
    */
@@ -386,6 +396,13 @@ export interface MenuItemsSelect<T extends boolean = true> {
   name?: T;
   description?: T;
   price?: T;
+  priceVariants?:
+    | T
+    | {
+        label?: T;
+        price?: T;
+        id?: T;
+      };
   promoPrice?: T;
   isPromo?: T;
   category?: T;

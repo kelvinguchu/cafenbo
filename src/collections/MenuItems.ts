@@ -30,8 +30,32 @@ export const MenuItems: CollectionConfig = {
       required: true,
       min: 0,
       admin: {
-        description: 'Price in KES',
+        description: 'Base price in KES. If variants are set, use the default or lowest price.',
       },
+    },
+    {
+      name: 'priceVariants',
+      type: 'array',
+      labels: {
+        singular: 'price variant',
+        plural: 'price variants',
+      },
+      admin: {
+        description: 'Optional size or portion prices shown instead of the base price.',
+      },
+      fields: [
+        {
+          name: 'label',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'price',
+          type: 'number',
+          required: true,
+          min: 0,
+        },
+      ],
     },
     {
       name: 'promoPrice',
@@ -39,7 +63,7 @@ export const MenuItems: CollectionConfig = {
       min: 0,
       admin: {
         description: 'Discounted promo price in KES',
-        condition: (data) => data?.isPromo,
+        condition: (data) => data?.isPromo && !data?.priceVariants?.length,
       },
     },
     {
@@ -49,6 +73,7 @@ export const MenuItems: CollectionConfig = {
       admin: {
         position: 'sidebar',
         description: 'Enable promo pricing for this item',
+        condition: (data) => !data?.priceVariants?.length,
       },
     },
     {

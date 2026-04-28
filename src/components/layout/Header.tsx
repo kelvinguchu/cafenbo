@@ -16,12 +16,13 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
 
-  let headerAppearanceClass = 'bg-transparent'
+  let innerClass =
+    'bg-black/40 backdrop-blur-md border border-white/10 rounded-full mx-4 mt-4 shadow-lg'
 
   if (mobileOpen) {
-    headerAppearanceClass = 'bg-transparent shadow-none'
+    innerClass = 'bg-transparent shadow-none border-transparent'
   } else if (scrolled) {
-    headerAppearanceClass = 'bg-white/95 backdrop-blur-md shadow-sm'
+    innerClass = 'bg-white/95 backdrop-blur-md shadow-sm rounded-none mx-0 mt-0 border-transparent'
   }
 
   const getFirstLineClass = (mobileOpen: boolean, scrolled: boolean) => {
@@ -58,65 +59,65 @@ export function Header() {
 
   return (
     <>
-      <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${headerAppearanceClass}`}
-      >
-        <div className="container-site flex items-center justify-between h-16 md:h-20">
-          <Link href="/" className="relative z-10 shrink-0">
-            <Image
-              src="/logo.png"
-              alt="Café NBO"
-              width={140}
-              height={50}
-              className={`h-10 md:h-12 w-auto transition-all duration-500 ${
-                scrolled && !mobileOpen ? '' : 'brightness-0 invert'
-              }`}
-              priority
-            />
-          </Link>
-
-          <nav className="hidden lg:flex items-center gap-8">
-            {NAV_LINKS.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className={`text-sm font-medium tracking-wide transition-colors duration-300 uppercase ${
-                  scrolled ? 'text-black/60 hover:text-brand' : 'text-white/80 hover:text-white'
+      <header className="fixed top-0 left-0 right-0 z-50">
+        <div className={`transition-all duration-500 ease-in-out ${innerClass}`}>
+          <div className="container-site flex items-center justify-between h-16 md:h-20">
+            <Link href="/" className="relative z-10 shrink-0">
+              <Image
+                src="/logo.png"
+                alt="Café NBO"
+                width={140}
+                height={50}
+                className={`h-10 md:h-12 w-auto -mt-2 transition-all duration-500 ${
+                  scrolled && !mobileOpen ? '' : 'brightness-0 invert'
                 }`}
+                priority
+              />
+            </Link>
+
+            <nav className="hidden lg:flex items-center gap-8">
+              {NAV_LINKS.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className={`text-sm font-medium tracking-wide transition-colors duration-300 uppercase ${
+                    scrolled ? 'text-black/60 hover:text-brand' : 'text-white/80 hover:text-white'
+                  }`}
+                >
+                  {link.label}
+                </a>
+              ))}
+            </nav>
+
+            <div className="flex items-center gap-4">
+              <a
+                href="https://glovoapp.com/ke/en/nairobi/cafe-nbo-nbo/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hidden sm:inline-flex items-center gap-2 bg-brand hover:bg-brand-dark text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-colors duration-300 cursor-pointer"
               >
-                {link.label}
+                Order Now
               </a>
-            ))}
-          </nav>
 
-          <div className="flex items-center gap-4">
-            <a
-              href="https://glovoapp.com/ke/en/nairobi/cafe-nbo-nbo/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hidden sm:inline-flex items-center gap-2 bg-brand hover:bg-brand-dark text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-colors duration-300 cursor-pointer"
-            >
-              Order Now
-            </a>
-
-            <button
-              type="button"
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className="lg:hidden relative z-10 w-10 h-10 flex flex-col items-center justify-center gap-1.5"
-              aria-label="Toggle menu"
-              aria-expanded={mobileOpen}
-              aria-controls="mobile-menu"
-            >
-              <span
-                className={`block w-6 h-0.5 transition-all duration-300 ${getFirstLineClass(mobileOpen, scrolled)}`}
-              />
-              <span
-                className={`block w-6 h-0.5 transition-all duration-300 ${getSecondLineClass(mobileOpen, scrolled)}`}
-              />
-              <span
-                className={`block w-6 h-0.5 transition-all duration-300 ${getThirdLineClass(mobileOpen, scrolled)}`}
-              />
-            </button>
+              <button
+                type="button"
+                onClick={() => setMobileOpen(!mobileOpen)}
+                className="lg:hidden relative z-10 w-10 h-10 flex flex-col items-center justify-center gap-1.5"
+                aria-label="Toggle menu"
+                aria-expanded={mobileOpen}
+                aria-controls="mobile-menu"
+              >
+                <span
+                  className={`block w-6 h-0.5 transition-all duration-300 ${getFirstLineClass(mobileOpen, scrolled)}`}
+                />
+                <span
+                  className={`block w-6 h-0.5 transition-all duration-300 ${getSecondLineClass(mobileOpen, scrolled)}`}
+                />
+                <span
+                  className={`block w-6 h-0.5 transition-all duration-300 ${getThirdLineClass(mobileOpen, scrolled)}`}
+                />
+              </button>
+            </div>
           </div>
         </div>
       </header>
